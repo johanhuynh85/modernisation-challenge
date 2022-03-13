@@ -1,0 +1,69 @@
+{{page-title "Modernisation Challenge"}}
+<h1>
+    Tasks
+</h1>
+<div class="table">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 1px;">Completed</th>
+                <th>Details</th>
+                <th style="width: 1px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each @model as |itm idx|}}
+            <tr>
+                <td style="text-align: center; width: 1px;">
+                    <span class="checkbox">
+                        <Input @type="checkbox" @checked={{itm.completed}} {{on "input" (fn this.completeItem itm)}} />
+                    </span>
+                </td>
+                <td>{{itm.details}}</td>
+                <td style="width: 1px;">
+                    <span class="popup_menu" onmousedown="return PopupHelper.init(this, this.querySelector('span'), { mode: 'click' });">
+                        <span onclick="this.parentNode.popupHelper.hide();">
+                            <a href="#" {{on 'click' (fn this.editItem itm)}}>Edit</a>
+                            <a href="#" {{on 'click' (fn this.deleteItem itm idx)}}>Delete</a>
+                        </span>
+                    </span>
+                </td>
+            </tr>
+            {{/each}}
+            <tr class="info">
+                <td colspan="99">
+                    <a href="#" {{on 'click' this.addItem}}>+ Create a new task</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{{#if this.toggleDialogue}}
+<div class="dialogue">
+    <div style="width: 750px;">
+        <div class="header">
+            <a href="#" class="close" {{on 'click' this.closeDialogue}}></a>
+            <h2>
+                {{this.titleLiteral}}
+            </h2>
+        </div>
+
+        <div class="body">
+            <fieldset class="required">
+                <label>Details</label>
+                <Textarea name="details" style="height: 100px;" class="text"
+                    @value={{this.editingTask.details}} required={{true}} />
+            </fieldset>
+        </div>
+
+        <div class="footer">
+            <p class="commands">
+                <span class="grow"></span>
+
+                <a href="#" class="button hollow" {{on 'click' this.closeDialogue}}>Cancel</a>
+                <a href="#" class="button" {{on 'click' this.saveItem}}>Save</a>
+            </p>
+        </div>
+    </div>
+</div>
+{{/if}}
